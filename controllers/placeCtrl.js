@@ -4,6 +4,7 @@ const redis = require('redis')
 const client = redis.createClient()
 
 const {  Tps, Rsu, Rsk, Puskesmas, Pospolda, Cctv, Pemadam, Ambulance, PemadamPetugas, Dinkes, Satpol, Dinhub } = require('../models/place')
+const cachetime = 30 * 24 * 3600
 
 client.on('error', err=> { console.log(`Error : ${err}`) } )
 
@@ -36,7 +37,7 @@ const getTPS = (req, res) => {
       finally {
         if (typeof tps.data.meta === 'undefined' || page > tps.data.meta.pagination.total_pages) {
           flag = false
-          client.setex('Tps', 30*24*3600, JSON.stringify(allTps))
+          client.setex('Tps', cachetime, JSON.stringify(allTps))
           res.send(allTps)
         } else
           allTps.push(...tps.data.features.map(feat => feat.properties))
@@ -55,7 +56,7 @@ const getRSU = (req, res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('Rsu', 30*24*3600, JSON.stringify(rsu.data))
+      client.setex('Rsu', cachetime, JSON.stringify(rsu.data))
       res.send(rsu.data)
     }
   })
@@ -70,7 +71,7 @@ const getRSK = (req, res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('Rsk', 30*24*3600, JSON.stringify(rsk.data))
+      client.setex('Rsk', cachetime, JSON.stringify(rsk.data))
       res.send(rsk.data)
     }
   })
@@ -85,7 +86,7 @@ const getPuskesmas = (req, res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('Puskesmas', 30*24*3600, JSON.stringify(puskesmas.data))
+      client.setex('Puskesmas', cachetime, JSON.stringify(puskesmas.data))
       res.send(puskesmas.data)
     }
   })
@@ -100,7 +101,7 @@ const getPospolda = (req, res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('Pospolda', 30*24*3600, JSON.stringify(pospolda.data))
+      client.setex('Pospolda', cachetime, JSON.stringify(pospolda.data))
       res.send(pospolda.data)
     }
   })
@@ -115,7 +116,7 @@ const getCctv = (req, res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('Cctv', 30*24*3600, JSON.stringify(cctv.data))
+      client.setex('Cctv', cachetime, JSON.stringify(cctv.data))
       res.send(cctv.data)
     }
   })
@@ -130,7 +131,7 @@ const getPemadam = (req, res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('Pemadam', 30*24*3600, JSON.stringify(pemadam.data))
+      client.setex('Pemadam', cachetime, JSON.stringify(pemadam.data))
       res.send(pemadam.data)
     }
   })
@@ -145,7 +146,7 @@ const getAmbulance = (req, res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('Ambulance', 30*24*3600, JSON.stringify(ambulance.data))
+      client.setex('Ambulance', cachetime, JSON.stringify(ambulance.data))
       res.send(ambulance.data)
     }
   })
@@ -160,7 +161,7 @@ const getPemadamPetugas = (req, res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('PemadamPetugas', 30*24*3600, JSON.stringify(pemadam_petugas.data))
+      client.setex('PemadamPetugas', cachetime, JSON.stringify(pemadam_petugas.data))
       res.send(pemadam_petugas.data)
     }
   })
@@ -175,7 +176,7 @@ const getDinkes = (req, res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('Dinkes', 30*24*3600, JSON.stringify(dinkes.data))
+      client.setex('Dinkes', cachetime, JSON.stringify(dinkes.data))
       res.send(dinkes.data)
     }
   })
@@ -190,7 +191,7 @@ const getSatpol = (req, res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('Satpol', 30*24*3600, JSON.stringify(satpol.data))
+      client.setex('Satpol', cachetime, JSON.stringify(satpol.data))
       res.send(satpol.data)
     }
   })
@@ -205,7 +206,7 @@ const getDinhub = (req, res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('Dinhub', 30*24*3600, JSON.stringify(dinhub.data))
+      client.setex('Dinhub', cachetime, JSON.stringify(dinhub.data))
       res.send(dinhub.data)
     }
   })

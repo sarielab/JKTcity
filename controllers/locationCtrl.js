@@ -4,6 +4,7 @@ const redis = require('redis')
 const client = redis.createClient()
 
 const {Kota, Kecamatan, Kelurahan, RW} = require('../models/location')
+const cachetime = 30 * 24 * 3600
 
 client.on('error', err=> { console.log(`Error : ${err}`) } )
 
@@ -27,7 +28,7 @@ const getKota = (req,res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('Kota', 5, JSON.stringify(kota.data))
+      client.setex('Kota', cachetime, JSON.stringify(kota.data))
       res.send({data:kota.data, source: 'data'})
     }
   })
@@ -42,7 +43,7 @@ const getKecamatan = (req,res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('Kecamatan', 30*24*3600, JSON.stringify(kecamatan.data))
+      client.setex('Kecamatan', cachetime, JSON.stringify(kecamatan.data))
       res.send({data:kecamatan.data, source: 'data'})
     }
   })
@@ -57,7 +58,7 @@ const getKelurahan = (req,res) => {
     } catch(err) {
       res.send({err:err.error})
     } finally {
-      client.setex('Kelurahan', 30*24*3600, JSON.stringify(kelurahan.data))
+      client.setex('Kelurahan', cachetime, JSON.stringify(kelurahan.data))
       res.send(kelurahan.data)
     }
   })
@@ -78,7 +79,7 @@ const getRW = (req,res) => {
       } finally {
         if (typeof rw.data.meta === 'undefined' || page > rw.data.meta.pagination.total_pages) {
           flag = false
-          client.setex('RW', 30*24*3600, JSON.stringify(allRW))
+          client.setex('RW', cachetime, JSON.stringify(allRW))
           res.send(allRW)
         }
         else {
