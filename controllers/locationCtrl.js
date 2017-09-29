@@ -55,8 +55,8 @@ const getRW = async (req,res) => {
       }
       else {
         page++
-        console.log('page',page)
-        allRW.push(...rw.data.features)
+        console.log(page)
+        allRW.push(...rw.data.features.map(feat=> feat.properties))
       }
     }
   }
