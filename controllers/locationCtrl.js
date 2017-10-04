@@ -1,12 +1,17 @@
 'use strict'
-
+require('dotenv').config()
 const redis = require('redis')
-const client = redis.createClient()
 
-const {Kota, Kecamatan, Kelurahan, RW} = require('../models/location')
+const client = redis.createClient(
+  process.env.redisPort,
+  process.env.redisHost,
+  {
+    'auth_pass': process.env.redisKey,
+    'return_buffers': true
+  }
+).on('error', err=> { console.log(`Error : ${err}`) } )
+const { Kota, Kecamatan, Kelurahan, RW } = require('../models/location')
 const cachetime = 30 * 24 * 3600
-
-client.on('error', err=> { console.log(`Error : ${err}`) } )
 
 const getData = (name, res, callback) => {
   client.get(name, (err, result) => {
